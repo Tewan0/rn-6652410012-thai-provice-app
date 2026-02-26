@@ -1,5 +1,6 @@
 import { supabase } from "@/services/supabase";
 import { events, location } from "@/types";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -54,15 +55,12 @@ export default function Home() {
           source={{ uri: featuredEvent.image_url }}
           style={styles.eventImage}
         />
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.8)"]}
+          style={styles.gradient}
+        />
         <View style={styles.eventBadge}>
-          <Text style={styles.eventBadgeText}>กิจกรรมแนะนำ</Text>
-        </View>
-        <View style={styles.eventInfo}>
-          <Text style={styles.eventTitle}>{featuredEvent.event_name}</Text>
-          <Text style={styles.eventDescription}>
-            {featuredEvent.description}
-          </Text>
-          <Text style={styles.eventPeriod}>{featuredEvent.period}</Text>
+          <Text style={styles.eventBadgeText}>งานประจำปี</Text>
         </View>
       </View>
     );
@@ -117,9 +115,9 @@ const styles = StyleSheet.create({
   },
   eventContainer: {
     width: width,
-    height: 250,
-    marginBottom: 20,
+    height: 300,
     backgroundColor: "#000",
+    marginBottom: 15,
   },
   eventImage: {
     width: "100%",
@@ -148,11 +146,11 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 26,
     fontFamily: "Prompt_700Bold",
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 5,
   },
   eventDate: {
     color: "#dfe4ea",
@@ -209,5 +207,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#747d8c",
     fontFamily: "Prompt_400Regular",
+  },
+  gradient: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
   },
 });
