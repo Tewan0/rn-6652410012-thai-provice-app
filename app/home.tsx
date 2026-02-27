@@ -85,30 +85,40 @@ export default function Home() {
     );
   };
 
-  const renderLocationItem = ({ item }: { item: location }) => (
-    <TouchableOpacity
-      style={styles.cardItem}
-      onPress={() => {
-        router.push({
-          pathname: "/detail",
-          params: { ...item },
-        });
-      }}
-    >
-      <Image source={{ uri: item.image_url }} style={styles.locationImage} />
-      <View style={styles.textContainer}>
-        <Text style={styles.locationName} numberOfLines={1}>
-          {item.name}
-        </Text>
-        <Text style={styles.locationCategory}>
-          {item.category || "สถานที่ท่องเที่ยว"}
-        </Text>
-        <Text style={styles.locationAddress} numberOfLines={2}>
-          {item.address}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderLocationItem = ({ item }: { item: location }) => {
+    // ดึงรูปแรกจาก Array มาแสดง ถ้าไม่มีให้ใส่รูปว่าง
+    const displayImage =
+      Array.isArray(item.image_url) && item.image_url.length > 0
+        ? item.image_url[0]
+        : typeof item.image_url === "string"
+          ? item.image_url
+          : null;
+
+    return (
+      <TouchableOpacity
+        style={styles.cardItem}
+        onPress={() => {
+          router.push({
+            pathname: "/detail",
+            params: { ...item },
+          });
+        }}
+      >
+        <Image source={{ uri: displayImage }} style={styles.locationImage} />
+        <View style={styles.textContainer}>
+          <Text style={styles.locationName} numberOfLines={1}>
+            {item.name}
+          </Text>
+          <Text style={styles.locationCategory}>
+            {item.category || "สถานที่ท่องเที่ยว"}
+          </Text>
+          <Text style={styles.locationAddress} numberOfLines={2}>
+            {item.address}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>

@@ -13,33 +13,31 @@ import {
 const { width } = Dimensions.get("window");
 
 export default function Detail() {
-  const item = useLocalSearchParams() as any; // ใช้ any ชั่วคราวเพื่อเช็คข้อมูล
+  const item = useLocalSearchParams() as any;
 
-  // ป้องกัน Error ด้วยการเช็คประเภทข้อมูลก่อนใช้งาน
+  // จัดการข้อมูลรูปภาพให้เป็น Array เสมอ
   const images = React.useMemo(() => {
     const rawData = item.image_url;
     if (!rawData) return [];
-
-    // ถ้าเป็น Array อยู่แล้ว (กรณีดึงจาก API โดยตรง)
     if (Array.isArray(rawData)) return rawData;
-
-    // ถ้าเป็น String (กรณีส่งผ่าน params มา) ให้ split ด้วย comma
     if (typeof rawData === "string") {
       return rawData.split(",").map((url: string) => url.trim());
     }
-
     return [];
   }, [item.image_url]);
 
   const mainImage = images.length > 0 ? images[0] : null;
   const subImages = images.length > 1 ? images.slice(1, 4) : [];
 
+  // เพิ่มการคำนวณตัวเลขรูปที่เหลือ (แก้ไขจุดที่ทำให้ Error)
+  const remainingCount = images.length > 4 ? images.length - 4 : 0;
+
   return (
     <ScrollView style={styles.container}>
       {/* 1. รูปหลักด้านบน */}
       <View style={styles.mainImageContainer}>
         {mainImage ? (
-          <Image source={{ uri: mainImage.trim() }} style={styles.mainImage} />
+          <Image source={{ uri: mainImage }} style={styles.mainImage} />
         ) : (
           <View style={styles.placeholder}>
             <Text>ไม่มีรูปภาพ</Text>
@@ -50,10 +48,10 @@ export default function Detail() {
       {/* 2. ตารางรูปเล็ก (Grid Gallery) */}
       {images.length > 1 && (
         <View style={styles.gridContainer}>
-          {subImages.map((uri, index) => (
+          {subImages.map((uri: string, index: number) => (
             <TouchableOpacity key={index} style={styles.subImageWrapper}>
-              <Image source={{ uri: uri.trim() }} style={styles.subImage} />
-              {/* ถ้าเป็นรูปสุดท้ายและยังมีรูปเหลือ ให้โชว์ +n */}
+              <Image source={{ uri: uri }} style={styles.subImage} />
+              {/* แสดงตัวเลข +n ที่รูปสุดท้ายของแถวเล็ก (ถ้ามีรูปเหลือ) */}
               {index === 2 && remainingCount > 0 && (
                 <View style={styles.overlay}>
                   <Text style={styles.overlayText}>+{remainingCount}</Text>
@@ -64,7 +62,7 @@ export default function Detail() {
         </View>
       )}
 
-      {/* 3. ส่วนเนื้อหาข้อมูล */}
+      {/* 3. เนื้อหาข้อมูล */}
       <View style={styles.content}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>{item.name}</Text>
