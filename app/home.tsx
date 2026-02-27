@@ -19,6 +19,7 @@ const { width } = Dimensions.get("window");
 export default function Home() {
   const [locations, setLocations] = useState<location[]>([]);
   const [eventData, setEventData] = useState<events[]>([]);
+  const [expandedDescription, setExpandedDescription] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,6 +62,24 @@ export default function Home() {
         />
         <View style={styles.eventBadge}>
           <Text style={styles.eventBadgeText}>งานประจำปี</Text>
+        </View>
+        <View style={styles.eventInfo}>
+          {featuredEvent.description && (
+            <TouchableOpacity
+              onPress={() => setExpandedDescription(!expandedDescription)}
+              activeOpacity={0.8}
+            >
+              <Text
+                style={styles.eventDescription}
+                numberOfLines={expandedDescription ? 0 : 2}
+              >
+                {featuredEvent.description}
+              </Text>
+              {!expandedDescription && (
+                <Text style={styles.expandText}>ดูเพิ่มเติม...</Text>
+              )}
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     );
@@ -144,30 +163,16 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
   },
-  eventTitle: {
-    color: "#fff",
-    fontSize: 26,
-    fontFamily: "Prompt_700Bold",
-    textShadowColor: "rgba(0, 0, 0, 0.5)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 5,
-  },
-  eventDate: {
-    color: "#dfe4ea",
-    fontSize: 14,
-    fontFamily: "Prompt_400Regular",
+  expandText: {
+    color: "#ffd700",
+    fontSize: 12,
+    fontFamily: "Prompt_600SemiBold",
+    marginTop: 4,
   },
   eventDescription: {
     color: "#dfe4ea",
     fontSize: 14,
     fontFamily: "Prompt_400Regular",
-    marginTop: 8,
-  },
-  eventPeriod: {
-    color: "#dfe4ea",
-    fontSize: 12,
-    fontFamily: "Prompt_400Regular",
-    marginTop: 4,
   },
   cardItem: {
     flexDirection: "row",

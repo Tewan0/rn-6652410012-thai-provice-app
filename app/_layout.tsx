@@ -35,6 +35,13 @@ export default function RootLayout() {
           headerTitleAlign: "center",
         }}
       />
+      <Stack.Screen
+        name="detail"
+        options={{
+          headerTitle: "รายละเอียด",
+          headerTitleAlign: "center",
+        }}
+      />
     </Stack>
   );
 }
