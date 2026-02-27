@@ -7,7 +7,7 @@ export type location = {
   address: string;
   latitude: number;
   longitude: number;
-  image_url: string[];
+  image_url: string;
 };
 
 export type events = {
