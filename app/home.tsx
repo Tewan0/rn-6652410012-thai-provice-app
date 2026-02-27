@@ -95,7 +95,7 @@ export default function Home() {
         });
       }}
     >
-      <Image source={{ uri: item.image_url[0] }} style={styles.locationImage} />
+      <Image source={{ uri: item.image_url }} style={styles.locationImage} />
       <View style={styles.textContainer}>
         <Text style={styles.locationName} numberOfLines={1}>
           {item.name}
