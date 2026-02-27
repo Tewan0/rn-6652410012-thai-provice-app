@@ -8,7 +8,7 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 
 const { width } = Dimensions.get("window");
