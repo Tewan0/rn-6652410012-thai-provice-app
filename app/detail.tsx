@@ -3,12 +3,14 @@ import React from "react";
 import {
   Dimensions,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
 const { width } = Dimensions.get("window");
 
@@ -27,10 +29,30 @@ export default function Detail() {
   }, [item.image_url]);
 
   const mainImage = images.length > 0 ? images[0] : null;
-  const subImages = images.length > 1 ? images.slice(1, 4) : [];
 
-  // เพิ่มการคำนวณตัวเลขรูปที่เหลือ (แก้ไขจุดที่ทำให้ Error)
-  const remainingCount = images.length > 4 ? images.length - 4 : 0;
+  const handlePhoneCall = (phone: string) => {
+    const phoneNumber = item.phone as string;
+    const url = `tel:${phoneNumber}`;
+    Linking.openURL(url);
+  };
+
+  // ฟังก์ชันสำหรับเปิดแอปแผนที่
+  const handleOpenMapApp = () => {
+    //สร้างตัวแปรเพื่อเปิด Google Maps
+    const googleMap = `https://maps.google.com/?q=${item.latitude},${item.longitude}`;
+
+    //สร้างตัวแปรเพื่อเปิด Apple Maps
+    const appleMap = `http://maps.apple.com/?q=${item.name}?&ll=${item.latitude},${item.longitude}`;
+
+    //ตรวจสอบการเปิดแอป Google Maps หรือ Apple Maps โดยยึด Google Maps เป็นหลัก
+    Linking.canOpenURL(googleMap).then((supported) => {
+      if (supported) {
+        Linking.openURL(googleMap);
+      } else {
+        Linking.openURL(appleMap);
+      }
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -44,23 +66,6 @@ export default function Detail() {
           </View>
         )}
       </View>
-
-      {/* 2. ตารางรูปเล็ก (Grid Gallery) */}
-      {images.length > 1 && (
-        <View style={styles.gridContainer}>
-          {subImages.map((uri: string, index: number) => (
-            <TouchableOpacity key={index} style={styles.subImageWrapper}>
-              <Image source={{ uri: uri }} style={styles.subImage} />
-              {/* แสดงตัวเลข +n ที่รูปสุดท้ายของแถวเล็ก (ถ้ามีรูปเหลือ) */}
-              {index === 2 && remainingCount > 0 && (
-                <View style={styles.overlay}>
-                  <Text style={styles.overlayText}>+{remainingCount}</Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
 
       {/* 3. เนื้อหาข้อมูล */}
       <View style={styles.content}>
@@ -78,8 +83,32 @@ export default function Detail() {
           <Text style={styles.infoText}>
             📍 {item.address || "ไม่ระบุที่อยู่"}
           </Text>
-          {item.phone && <Text style={styles.infoText}>📞 {item.phone}</Text>}
+          {item.phone && (
+            <TouchableOpacity onPress={() => handlePhoneCall(item.phone)}>
+              <Text style={styles.phoneText}>📞 {item.phone}</Text>
+            </TouchableOpacity>
+          )}
         </View>
+        <Text>แผนที่</Text>
+        <MapView
+          style={{ width: "100%", height: 300, marginTop: 10 }}
+          initialRegion={{
+            latitude: parseFloat(item.latitude as string),
+            longitude: parseFloat(item.longitude as string),
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: parseFloat(item.latitude as string),
+              longitude: parseFloat(item.longitude as string),
+            }}
+            title={item.name as string}
+            description={item.description as string}
+            onPress={handleOpenMapApp}
+          />
+        </MapView>
       </View>
       <View style={{ height: 50 }} />
     </ScrollView>
@@ -97,34 +126,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
-  gridContainer: {
-    flexDirection: "row",
-    paddingHorizontal: 15,
-    marginTop: -30, // ให้รูปเล็กเกยทับรูปใหญ่เล็กน้อยเพื่อความสวยงาม
-    justifyContent: "space-between",
-  },
-  subImageWrapper: {
-    width: (width - 50) / 3,
-    height: 80,
-    borderRadius: 12,
-    overflow: "hidden",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    backgroundColor: "#fff",
-  },
-  subImage: { width: "100%", height: "100%", resizeMode: "cover" },
-
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  overlayText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
 
   content: { padding: 20, marginTop: 10 },
   headerRow: {
@@ -163,4 +164,11 @@ const styles = StyleSheet.create({
     borderLeftColor: "#1976D2",
   },
   infoText: { fontSize: 14, color: "#2D3436", marginBottom: 5 },
+  phoneText: {
+    fontSize: 14,
+    color: "#1976D2",
+    marginBottom: 5,
+    fontWeight: "600",
+    textDecorationLine: "underline",
+  },
 });
