@@ -1,68 +1,43 @@
 import { useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import {
   Dimensions,
   FlatList,
   Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
+import { location } from "../types";
 
 const { width } = Dimensions.get("window");
 
-export default function DetailScreen() {
-  const item = useLocalSearchParams();
+export default function Detail() {
+  const item = useLocalSearchParams() as unknown as location;
+
+  // ตรวจสอบว่า image_url เป็น array หรือไม่ ถ้าส่งมาจาก params อาจต้อง parse ก่อน
   const images = Array.isArray(item.image_url)
     ? item.image_url
-    : [item.image_url];
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollPosition = event.nativeEvent.contentOffset.x;
-    const index = Math.round(scrollPosition / width);
-    setActiveIndex(index);
-  };
+    : typeof item.image_url === "string"
+      ? (item.image_url as string).split(",") // กรณีส่งมาเป็น string คั่นด้วย comma
+      : [];
 
   return (
     <View style={styles.container}>
-      <View style={styles.carouselContainer}>
+      <View style={styles.imageContainer}>
         <FlatList
           data={images}
-          horizontal
-          pagingEnabled
+          horizontal // ทำให้เลื่อนแนวนอน
+          pagingEnabled // ทำให้เลื่อนหยุดทีละหน้า (เหมือน Carousel)
           showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          keyExtractor={(_, index) => index.toString()}
+          keyExtractor={(img, index) => index.toString()}
           renderItem={({ item: uri }) => (
-            <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+            <Image source={{ uri }} style={styles.image} />
           )}
         />
-
-        <View style={styles.pagination}>
-          {images.length > 1 &&
-            images.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.dot,
-                  {
-                    backgroundColor:
-                      index === activeIndex ? "#FF6B6B" : "#D3D3D3",
-                  },
-                ]}
-              />
-            ))}
-        </View>
       </View>
-
-      {/* ส่วนรายละเอียดด้านล่าง */}
-      <View style={styles.details}>
+      <View style={styles.content}>
         <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.address}>{item.address}</Text>
         <Text style={styles.description}>{item.description}</Text>
       </View>
     </View>
@@ -71,22 +46,9 @@ export default function DetailScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
-  carouselContainer: { height: 300, position: "relative" },
-  image: { width: width, height: 300 },
-  pagination: {
-    position: "absolute",
-    bottom: 15,
-    flexDirection: "row",
-    alignSelf: "center",
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 4,
-  },
-  details: { padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 5 },
-  address: { fontSize: 16, color: "#747d8c", marginBottom: 10 },
-  description: { fontSize: 16, color: "#444", lineHeight: 22 },
+  imageContainer: { height: 300 }, // กำหนดความสูงของพื้นที่รูปภาพ
+  image: { width: width, height: 300, resizeMode: "cover" },
+  content: { padding: 20 },
+  title: { fontSize: 24, fontWeight: "bold" },
+  description: { fontSize: 16, marginTop: 10, color: "#666" },
 });
