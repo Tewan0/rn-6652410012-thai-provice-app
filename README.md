@@ -1,50 +1,7 @@
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+#แอปประชาสัมพันธ์จังหวัดอุดรธานี#
+<img width="200" alt="rn-thai-provice-app1" src="https://github.com/user-attachments/assets/a61452b3-ea93-451b-929b-a0e243949cbb" />
+<img width="200" alt="rn-thai-provice-app2" src="https://github.com/user-attachments/assets/780fc0ac-6ef1-481a-bb77-96a9a78da14b" />
+<img width="200" alt="rn-thai-provice-app3" src="https://github.com/user-attachments/assets/aab283f5-3cd7-4dd1-9a19-ce1cc6bffa72" />
+<img width="200" alt="rn-thai-provice-app4" src="https://github.com/user-attachments/assets/9dd29bed-fd8a-4468-8ce5-ea3418caa9d3" />
+<img width="200" alt="rn-thai-provice-app5" src="https://github.com/user-attachments/assets/cf89833c-9a11-4e11-bb0a-c96221575a59" />
+<img width="200" alt="rn-thai-provice-app-table" src="https://github.com/user-attachments/assets/b50b3b1d-79d5-4451-ab1c-a56dec1f365f" />
