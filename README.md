@@ -10,4 +10,4 @@
 &nbsp;&nbsp;
 <img width="200" alt="rn-thai-provice-app5" src="https://github.com/user-attachments/assets/cf89833c-9a11-4e11-bb0a-c96221575a59" />
 &nbsp;&nbsp;
-<img width="1000" alt="rn-thai-provice-app-table" src="https://github.com/user-attachments/assets/b50b3b1d-79d5-4451-ab1c-a56dec1f365f" />
+<img width="800" alt="rn-thai-provice-app-table" src="https://github.com/user-attachments/assets/b50b3b1d-79d5-4451-ab1c-a56dec1f365f" />
