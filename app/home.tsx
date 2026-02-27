@@ -86,39 +86,47 @@ export default function Home() {
   };
 
   const renderLocationItem = ({ item }: { item: location }) => {
-    // ดึงรูปแรกจาก Array มาแสดง ถ้าไม่มีให้ใส่รูปว่าง
-    const displayImage =
-      Array.isArray(item.image_url) && item.image_url.length > 0
-        ? item.image_url[0]
-        : typeof item.image_url === "string"
-          ? item.image_url
-          : null;
+  // ตรวจสอบข้อมูลรูปภาพให้ปลอดภัย
+  const displayImage = item.image_url && item.image_url.length > 0 
+    ? item.image_url[0]
+    : null;
 
-    return (
-      <TouchableOpacity
-        style={styles.cardItem}
-        onPress={() => {
-          router.push({
-            pathname: "/detail",
-            params: { ...item },
-          });
-        }}
-      >
-        <Image source={{ uri: displayImage }} style={styles.locationImage} />
-        <View style={styles.textContainer}>
-          <Text style={styles.locationName} numberOfLines={1}>
-            {item.name}
-          </Text>
-          <Text style={styles.locationCategory}>
-            {item.category || "สถานที่ท่องเที่ยว"}
-          </Text>
-          <Text style={styles.locationAddress} numberOfLines={2}>
-            {item.address}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  return (
+    <TouchableOpacity
+      style={styles.cardItem}
+      onPress={() => {
+        // ก่อนส่งไปหน้า detail ให้แปลง Array เป็น String เพื่อความปลอดภัย
+        const params = {
+          ...item,
+          image_url: Array.isArray(item.image_url) 
+            ? item.image_url.join(",") 
+            : item.image_url
+        };
+        
+        router.push({
+          pathname: "/detail",
+          params: params,
+        });
+      }}
+    >
+      <Image 
+        source={displayImage ? { uri: displayImage } : require("../assets/images/favicon.png")} 
+        style={styles.locationImage} 
+      />
+      <View style={styles.textContainer}>
+        <Text style={styles.locationName} numberOfLines={1}>
+          {item.name}
+        </Text>
+        <Text style={styles.locationCategory}>
+          {item.category || "สถานที่ท่องเที่ยว"}
+        </Text>
+        <Text style={styles.locationAddress} numberOfLines={2}>
+          {item.address}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
   return (
     <View style={styles.container}>
